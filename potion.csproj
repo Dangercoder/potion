@@ -2,13 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Nullable>enable</Nullable>
+        <PackAsTool>true</PackAsTool>
+         <StartupObject>Program.CljMain</StartupObject>
   </PropertyGroup>
+
   <ItemGroup>
     <None Include="LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>  
+
   <ItemGroup>
     <PackageReference Include="Clojure" Version="1.12.0-alpha7" />
   </ItemGroup>
