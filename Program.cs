@@ -53,6 +53,7 @@ namespace Program
 
             foreach (var originalTargetFramework in originalTargetFrameworks)
             {
+                try {
                 Console.WriteLine(originalTargetFramework);
                 var targetPackages = projectAssetsJson.GetProperty("targets").GetProperty(originalTargetFramework.ToString());
 
@@ -72,6 +73,10 @@ namespace Program
                             // Ignoring exceptions
                         }
                     }
+                }
+
+                } catch (Exception e) {
+                    
                 }
             }}
 

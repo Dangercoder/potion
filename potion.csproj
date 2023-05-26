@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <VersionPrefix>0.0.1</VersionPrefix>
+  <VersionSuffix>alpha</VersionSuffix>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
