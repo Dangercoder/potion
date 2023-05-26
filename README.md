@@ -1,4 +1,5 @@
 # Potion
+![](./potion.png?raw=true)
 
 A [clojure-clr](https://github.com/clojure/clojure-clr) tool that loads assemblies from project.csproj
 and launches clojure.
