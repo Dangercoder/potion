@@ -4,8 +4,6 @@ and launches clojure.
 
 Requires .NET 6 or higher
 
-Latest guides can be found here https://github.com/Dangercoder/potion
-
 ## Installation
 `dotnet tool install --global potion`
 
