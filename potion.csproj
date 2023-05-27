@@ -4,7 +4,7 @@
     <VersionPrefix>0.0.1</VersionPrefix>
   <VersionSuffix>alpha</VersionSuffix>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackAsTool>true</PackAsTool>
          <StartupObject>Program.CljMain</StartupObject>
