@@ -1,0 +1,9 @@
+(ns minimal-example.core)
+
+(defn print-welcome-message []
+  (println "Hello Jan, this is the .NET guru at Svea-rikets kommuner.")
+  (println "Welcoming clojure-clr"))
+
+(comment 
+   (print-welcome-message)
+  )
