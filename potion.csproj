@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Clojure" Version="1.12.0-alpha8" />
+    <PackageReference Include="clojure.tools.nrepl" Version="0.1.0-alpha1" />
   </ItemGroup>
 
 
