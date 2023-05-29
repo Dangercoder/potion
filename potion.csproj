@@ -1,20 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.0.1</VersionPrefix>
-  <VersionSuffix>alpha</VersionSuffix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackAsTool>true</PackAsTool>
-         <StartupObject>Program.CljMain</StartupObject>
+         <StartupObject>Tool.Runner</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="LICENSE" Pack="true" PackagePath=""/>
+    <None Include="LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>  
 
   <ItemGroup>
-    <PackageReference Include="Clojure" Version="1.12.0-alpha7" />
+    <PackageReference Include="Clojure" Version="1.12.0-alpha8" />
   </ItemGroup>
+
+
 </Project>
