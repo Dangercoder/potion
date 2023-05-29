@@ -1,0 +1,9 @@
+(ns potion.test-runner
+  (:require [clojure.test :as clojure.test]))
+
+(defn run [test-ns]
+  (let [result (clojure.test/run-tests test-ns)
+        {:keys [fail error]} result]
+        (when (or (>= 1 fail)
+                (>= 1 error))
+         (System.Environment/Exit 1))))

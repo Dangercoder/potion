@@ -1,0 +1,9 @@
+(ns potion.example-test
+  (:require [clojure.test :refer [deftest testing is]]))
+
+(deftest the-tests
+  (testing "I AM ON A MISSION"
+    (is (= 1 1)))
+  (testing "danger is danger"
+    (is (= "danger" "nope"))))
+
