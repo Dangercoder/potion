@@ -15,6 +15,12 @@ namespace Tool
         {
             DependencyLoader.Load();
 
+            if (args.Length > 0 && args[0] == "repl")
+            {
+                NreplRunner.Run();
+                return;
+            }
+
             if (args.Length > 0 && args[0] == "test")
             {
                 TestRunner.Run();
