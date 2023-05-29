@@ -11,7 +11,7 @@ namespace Tool
 
         public static void Run(string testRoot = "test", string srcRoot = "src")
         {
-            var testRunner = RT.var("potion.test-runner", "run");
+            
 
             var directories = new List<string> { srcRoot, testRoot };
 
@@ -39,6 +39,8 @@ namespace Tool
                         if (ns.StartsWith("test."))
                         {
                             ns = ns.Substring("test.".Length);
+                            // TODO system exit.
+                            var testRunner = RT.var("clojure.test", "run-tests");
                             testRunner.invoke(Symbol.intern(ns));
                         }
                     }
