@@ -1,4 +1,5 @@
 # Potion
+
 A [clojure-clr](https://github.com/clojure/clojure-clr) tool for .NET 3.1+
 
 ## Installation
@@ -13,5 +14,5 @@ A [clojure-clr](https://github.com/clojure/clojure-clr) tool for .NET 3.1+
 ### Example usage
 * Be in the same directory as your .csproj  
 * `dotnet restore`
-* `potion` 
- 
+* `potion` - starts a clojure repl
+* `potion test` - runs all tests under `/test`
