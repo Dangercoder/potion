@@ -8,6 +8,8 @@ A [clojure-clr](https://github.com/clojure/clojure-clr) tool for .NET 3.1+
 `dotnet add package clojure.tools.nrepl --version 0.1.0-alpha1` is needed
 because .NET tools does not include dependencies.
 
+`dotnet restore` 
+
 ## Commands
 | Command | Description |
 | ------- | ----------- |
