@@ -17,7 +17,8 @@ because .NET tools does not include dependencies.
 | `potion repl` | Starts a nrepl server on `localhost:1667` with all assemblies loaded from the `.csproj` file |
 | `potion test` | Run tests located in the `test` directory |
 
-### Calva Setup
+### Visual Studio Code - Calva Setup 
+https://calva.io/
 1. run `potion repl`
 2. Calva: Connect to a Running Repl Server -> Generic -> `localhost:1667`
 
