@@ -1,0 +1,106 @@
+(ns dotnet-api.main
+  (:require [clojure.data.json :as json]
+            [clojure.spec.alpha :as s]
+            [clojure.spec.gen.alpha :as gen])
+  (:import [Microsoft.AspNetCore.Builder EndpointRouteBuilderExtensions]
+           [Microsoft.AspNetCore.Builder EndpointRouteBuilderExtensions WebApplication]
+           [Microsoft.AspNetCore.Hosting WebHostBuilderKestrelExtensions]
+           [Microsoft.AspNetCore.Http HttpRequestRewindExtensions]
+           [Microsoft.AspNetCore.Http HttpContext HttpResponseWritingExtensions RequestDelegate]
+           [Microsoft.AspNetCore.Http HttpContext HttpResponseWritingExtensions RequestDelegate]
+           [Microsoft.AspNetCore.Server.Kestrel.Core KestrelServerOptions]
+           [System.IO StreamReader]
+           [System.Threading CancellationTokenSource]
+           [System.Threading.Tasks Task]))
+
+
+(s/def ::home-state #{:dirty :clean :unicorn})
+(s/def ::home-name string?)
+(s/def ::home-age pos-int?)
+(s/def ::home-id uuid?)
+
+(s/def ::home-response
+  (s/keys :req-un [::home-name
+                   ::home-state
+                   ::home-age
+                   ::home-id]))
+
+(defn ->cancellation-token []
+        (-> (new CancellationTokenSource)
+            (.Token)))
+
+#_{:clj-kondo/ignore [:unresolved-symbol]}
+(defn allow-synchronous-io [builder]
+  (-> builder
+      .-WebHost
+      (WebHostBuilderKestrelExtensions/ConfigureKestrel
+       (sys-action [KestrelServerOptions] [options]
+                   (set! (.-AllowSynchronousIO options) true))))
+  builder)
+
+(defn home-handler [^HttpContext http-context]
+  (let [raw-response (.Response http-context)
+        _ (set! (.-StatusCode raw-response) 200)]
+    (HttpResponseWritingExtensions/WriteAsync raw-response "Hello, World!")))
+
+      ;;  In C# this is
+      ;;  app.MapGet("/", async (context) => "{}")
+(defn home-request-handler []
+  (gen-delegate RequestDelegate [^HttpContext http-context]
+                (Task/Run (sys-action [] []
+                                      (let [request (.Request http-context)
+                                            response (.Response http-context)
+                                            response-json (json/write-str (gen/generate (s/gen ::home-response)))]
+                                        (set! (.-StatusCode response) 200)
+                                        (set! (.-ContentType response) "application/json")
+                                        (HttpResponseWritingExtensions/WriteAsync response response-json (->cancellation-token)))))))
+
+(defn order-post-request-handler-async []
+  (gen-delegate RequestDelegate [^HttpContext http-context]
+                (Task/Run (sys-action [] []
+                                      (let [request (.Request http-context)
+                                            _ (HttpRequestRewindExtensions/EnableBuffering request)
+                                            body (-> request .Body)
+                                            _ (set! (.Position body) 0)]
+                                        ;; !! This is broken, Task.Wait() is blocking --
+                                        ;;    There's no way to "await" for a task to complete without blocking.
+                                        ;;    Even if we use core.async - we would still have to block the main thread.
+                                        ;;    This makes using clojure-clr unpractical.
+                                          (.Wait 
+                                           (-> (new StreamReader body)
+                                               (.ReadToEndAsync)
+                                               (.ContinueWith
+                                                (sys-action [|System.Threading.Tasks.Task`1[System.String]|] [^Task task]
+                                                            (let [request-json-string (.Result task)
+                                                                  response (.Response http-context)]
+                                                              (set! (.-StatusCode response) 200)
+                                                              (set! (.-ContentType response) "application/json")
+                                                              (HttpResponseWritingExtensions/WriteAsync response request-json-string (->cancellation-token))))
+                                                (->cancellation-token)))))))))
+
+#_{:clj-kondo/ignore [:unresolved-symbol]}
+(defn configure-routes [^WebApplication app]
+  (-> app
+      (doto (EndpointRouteBuilderExtensions/MapGet "/" (home-request-handler))
+            (EndpointRouteBuilderExtensions/MapPost "/order" (order-post-request-handler-async)))))
+
+(defn ->app []
+  (-> (WebApplication/CreateBuilder)
+      allow-synchronous-io
+      (.Build)
+      (configure-routes)))
+
+(defn stop [app]
+    (.StopAsync app (->cancellation-token)))
+
+(defn start []
+  (let [app (->app)]
+    (future (.Run app "http://localhost:5000"))
+    app))
+
+(comment
+  (def app (start))
+
+  (stop app)
+  
+  :rcf)
