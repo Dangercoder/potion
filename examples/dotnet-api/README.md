@@ -5,8 +5,8 @@ Showcases how to use clojure-clr with .NET 7's minimal api.
 connect to a repl and eval the whole file and (start) (stop) in the comment block.
    
 ### endpoints
-localhost:4999/order -- POST -- any json body. 
-localhost:4999/      -- GET  -- returns a generated response body based on clojure.spec definitions
+localhost:5000/order -- POST -- any json body. 
+localhost:5000/      -- GET  -- returns a generated response body based on clojure.spec definitions
 
 ### I hope that we at one point can get to this state:
 
