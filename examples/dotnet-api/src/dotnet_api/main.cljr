@@ -13,7 +13,6 @@
            [System.Threading CancellationTokenSource]
            [System.Threading.Tasks Task]))
 
-
 (s/def ::home-state #{:dirty :clean :unicorn})
 (s/def ::home-name string?)
 (s/def ::home-age pos-int?)
@@ -55,28 +54,29 @@
                                         (set! (.-ContentType response) "application/json")
                                         (HttpResponseWritingExtensions/WriteAsync response response-json (->cancellation-token)))))))
 
+(defmacro continue-with [task result-type & body]
+  `(-> ~task
+       (.ContinueWith
+        @(sys-action [|System.Threading.Tasks.Task`1[System.String]|] [^Task task#]
+                     (let [result# (.Result task#)]
+                       ~@body)))))
+
 (defn order-post-request-handler-async []
-  (gen-delegate RequestDelegate [^HttpContext http-context]
-                (Task/Run (sys-action [] []
-                                      (let [request (.Request http-context)
-                                            _ (HttpRequestRewindExtensions/EnableBuffering request)
-                                            body (-> request .Body)
-                                            _ (set! (.Position body) 0)]
-                                        ;; !! This is broken, Task.Wait() is blocking --
-                                        ;;    There's no way to "await" for a task to complete without blocking.
-                                        ;;    Even if we use core.async - we would still have to block the main thread.
-                                        ;;    This makes using clojure-clr unpractical.
-                                          (.Wait 
-                                           (-> (new StreamReader body)
-                                               (.ReadToEndAsync)
-                                               (.ContinueWith
-                                                (sys-action [|System.Threading.Tasks.Task`1[System.String]|] [^Task task]
-                                                            (let [request-json-string (.Result task)
-                                                                  response (.Response http-context)]
-                                                              (set! (.-StatusCode response) 200)
-                                                              (set! (.-ContentType response) "application/json")
-                                                              (HttpResponseWritingExtensions/WriteAsync response request-json-string (->cancellation-token))))
-                                                (->cancellation-token)))))))))
+   (gen-delegate RequestDelegate [^HttpContext http-context]
+                   (let [request (.Request http-context)
+                         _ (HttpRequestRewindExtensions/EnableBuffering request)
+                         body (-> request .Body)
+                         _ (set! (.Position body) 0)]
+                     (-> (new StreamReader body)
+                         (.ReadToEndAsync)
+                         (.ContinueWith (sys-action [|System.Threading.Tasks.Task`1[System.String]|] [^Task task]
+                                      (let [request-json-string (.Result task) ;; this doesn't block since we're in a .ContinueWith block.
+                                            response (.Response http-context)]
+                                        (set! (.-StatusCode response) 200)
+                                        (set! (.-ContentType response) "application/json")
+                                        (HttpResponseWritingExtensions/WriteAsync response request-json-string (->cancellation-token))))
+                          (->cancellation-token))))))
+
 
 #_{:clj-kondo/ignore [:unresolved-symbol]}
 (defn configure-routes [^WebApplication app]
