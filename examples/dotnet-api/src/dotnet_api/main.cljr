@@ -54,13 +54,6 @@
                                         (set! (.-ContentType response) "application/json")
                                         (HttpResponseWritingExtensions/WriteAsync response response-json (->cancellation-token)))))))
 
-(defmacro continue-with [task result-type & body]
-  `(-> ~task
-       (.ContinueWith
-        @(sys-action [|System.Threading.Tasks.Task`1[System.String]|] [^Task task#]
-                     (let [result# (.Result task#)]
-                       ~@body)))))
-
 (defn order-post-request-handler-async []
    (gen-delegate RequestDelegate [^HttpContext http-context]
                    (let [request (.Request http-context)
