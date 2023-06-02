@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.0.3</VersionPrefix>
+    <VersionPrefix>1.0.4</VersionPrefix>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -17,11 +17,5 @@
     <PackageReference Include="Clojure" Version="1.12.0-alpha8" />
     <PackageReference Include="clojure.tools.nrepl" Version="0.1.0-alpha1" />
   </ItemGroup>
-
-<ItemGroup>
-    <None Update="src\potion\nrepl.cljr">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-</ItemGroup>
 
 </Project>

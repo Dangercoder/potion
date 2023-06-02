@@ -28,54 +28,6 @@ namespace Tool
             }
         }
 
-        static void LoadNugetPackages()
-        {
-            var projectAssetsPath = "obj/project.assets.json";
-            var jsonDocumentOptions = new JsonDocumentOptions();
-            var jsonSerializerOptions = new JsonSerializerOptions();
-
-            using var streamReader = new StreamReader(projectAssetsPath);
-            var jsonString = streamReader.ReadToEnd();
-
-            using var jsonDocument = JsonDocument.Parse(jsonString, jsonDocumentOptions);
-
-            var projectAssetsJson = jsonDocument.RootElement;
-            var packagesPath = projectAssetsJson.GetProperty("project").GetProperty("restore").GetProperty("packagesPath").GetString();
-            var originalTargetFrameworks = projectAssetsJson.GetProperty("project").GetProperty("restore").GetProperty("originalTargetFrameworks").EnumerateArray();
-
-            foreach (var originalTargetFramework in originalTargetFrameworks)
-            {
-                try
-                {
-                    Console.WriteLine(originalTargetFramework);
-                    var targetPackages = projectAssetsJson.GetProperty("targets").GetProperty(originalTargetFramework.ToString());
-
-                    // TODO this loads too much if there's multiple targets.
-                    foreach (var targetPackage in targetPackages.EnumerateObject())
-                    {
-                        Console.WriteLine(targetPackage.Name);
-                        var dllPath = $"{packagesPath}/{targetPackage.Name.ToLower()}/{targetPackage.Value.GetProperty("runtime").EnumerateObject().FirstOrDefault().Name}";
-
-                        if (dllPath.Contains(".dll"))
-                        {
-                            try
-                            {
-                                Assembly.LoadFrom(dllPath);
-                            }
-                            catch (Exception)
-                            {
-                                // Ignoring exceptions
-                            }
-                        }
-                    }
-
-                }
-                catch (Exception e)
-                {
-
-                }
-            }
-        }
         public static void Load()
         {
             var x = 32.GetType().Assembly.Location;
@@ -87,7 +39,7 @@ namespace Tool
 
             LoadAllAssembliesInDirectory(coreAppAssemblyDirectory);
             LoadAllAssembliesInDirectory(aspNetCoreAppAssemblyDirectory);
-            LoadNugetPackages();
+            DependencyLoaderCsProj.LoadDependenciesFromCsproj();
         }
 
     }

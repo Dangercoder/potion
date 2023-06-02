@@ -1,5 +1,0 @@
-(ns potion.nrepl
-  (:require [clojure.tools.nrepl :as nrepl]))
-
-(defn start-nrepl []
-  (clojure.tools.nrepl/start-server! {:port 6667}))
