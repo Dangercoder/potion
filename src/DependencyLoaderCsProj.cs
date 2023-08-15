@@ -105,7 +105,7 @@ namespace Tool
         {
             // Then proceed with loading the assembly
             // Define all available frameworks in descending order of compatibility
-            string[] allFrameworks = { "net8.0", "net7.0", "net6.0", "net5.0", "netcoreapp3.1", "netstandard2.1", "netstandard2.0"};
+            string[] allFrameworks = { "net8.0", "net7.0", "net7.0-windows", "net6.0", "net5.0", "netcoreapp3.1", "netstandard2.1", "netstandard2.0"};
 
             // Determine the starting index in the allFrameworks array based on the target framework
             int startIndex = Array.IndexOf(allFrameworks, Frameworks.First());

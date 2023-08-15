@@ -1,6 +1,7 @@
 .clj-kondo
 .lsp
 .portal
+.vs
 bin
 obj
 publish

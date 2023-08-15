@@ -3,7 +3,7 @@
   <PropertyGroup>
     <VersionPrefix>1.0.6</VersionPrefix>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net6.0;net7.0;net7.0-windows</TargetFrameworks>
        <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackAsTool>true</PackAsTool>
          <StartupObject>Tool.Runner</StartupObject>

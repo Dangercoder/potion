@@ -36,9 +36,11 @@ namespace Tool
 
             var coreAppAssemblyDirectory = Path.GetDirectoryName(x);
             var aspNetCoreAppAssemblyDirectory = coreAppAssemblyDirectory.Replace("Microsoft.NETCore.App", "Microsoft.AspNetCore.App");
+            var winDesktopAppAssemblyDirectory = coreAppAssemblyDirectory.Replace("Microsoft.NETCore.App", "Microsoft.WindowsDesktop.App");
 
             LoadAllAssembliesInDirectory(coreAppAssemblyDirectory);
             LoadAllAssembliesInDirectory(aspNetCoreAppAssemblyDirectory);
+            LoadAllAssembliesInDirectory(winDesktopAppAssemblyDirectory);
             DependencyLoaderCsProj.LoadDependenciesFromCsproj();
         }
 
