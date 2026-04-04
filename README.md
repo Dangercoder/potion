@@ -1,4 +1,4 @@
-# Potion
+# Potion - ARCHIVED use https://github.com/Dangercoder/Clojure.MSBuild instead
 
 A [clojure-clr](https://github.com/clojure/clojure-clr) tool for .NET 3.1+
 
